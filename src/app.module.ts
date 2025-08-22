@@ -4,6 +4,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Space } from './spaces/entities/space.entity';
+import { SpacesModule } from './spaces/spaces.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { Space } from './spaces/entities/space.entity';
       }),
     }),
     TypeOrmModule.forFeature([Space]),
+    SpacesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -3,7 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Location } from './locations/entities/location.entity';
+import { Space } from './spaces/entities/space.entity';
 
 @Module({
   imports: [
@@ -20,7 +20,7 @@ import { Location } from './locations/entities/location.entity';
         synchronize: true,
       }),
     }),
-    TypeOrmModule.forFeature([Location]),
+    TypeOrmModule.forFeature([Space]),
   ],
   controllers: [AppController],
   providers: [AppService],

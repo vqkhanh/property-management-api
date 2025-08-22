@@ -1,9 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { Location } from './locations/entities/location.entity';
 
 @Module({
   imports: [
@@ -20,7 +19,6 @@ import { Location } from './locations/entities/location.entity';
         synchronize: true,
       }),
     }),
-    TypeOrmModule.forFeature([Location]),
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { AllExceptionsFilter } from './common/filters/http-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -13,7 +14,9 @@ async function bootstrap() {
     }),
   );
 
-  // 🔹 Swagger setup
+  app.useGlobalFilters(new AllExceptionsFilter());
+
+  // Swagger setup
   const config = new DocumentBuilder()
     .setTitle('Property Management API')
     .setDescription('API for managing spaces (building, floor, room)')

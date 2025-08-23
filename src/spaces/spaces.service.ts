@@ -44,14 +44,39 @@ export class SpacesService {
     return this.repo.save(space);
   }
 
-  findAll(params?: { building?: string }) {
+  async findAll(params?: {
+    building?: string;
+    q?: string;
+    page?: number;
+    limit?: number;
+  }) {
     this.logger.log(
-      `Fetching all spaces ${
+      `Fetching spaces ${
         params?.building ? 'for building ' + params.building : ''
-      }`,
+      } ${params?.q ? 'with search ' + params.q : ''}`,
     );
-    const where = params?.building ? { building: params.building } : {};
-    return this.repo.find({ where, relations: ['parent'] });
+
+    const qb = this.repo
+      .createQueryBuilder('space')
+      .leftJoinAndSelect('space.parent', 'parent')
+      .orderBy('space.id', 'ASC');
+
+    if (params?.building) {
+      qb.andWhere('space.building = :building', { building: params.building });
+    }
+
+    if (params?.q) {
+      qb.andWhere('space.displayName ILIKE :q', { q: `%${params.q}%` });
+    }
+
+    const page = params?.page ?? 1;
+    const limit = params?.limit ?? 10;
+
+    qb.skip((page - 1) * limit).take(limit);
+
+    const [data, total] = await qb.getManyAndCount();
+
+    return { data, total, page, limit };
   }
 
   async findOne(id: number) {

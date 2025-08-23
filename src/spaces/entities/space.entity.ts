@@ -22,13 +22,13 @@ export class Space {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 50 })
+  @Column({ length: 50, nullable: true })
   building: string; // "A", "B", etc.
 
-  @Column({ length: 200 })
+  @Column({ length: 200, nullable: true })
   displayName: string; // "Lobby Level 1"
 
-  @Column({ length: 100 })
+  @Column({ length: 100, nullable: true })
   refCode: string; // "A-01-Lobby"
 
   @Column('numeric', { precision: 12, scale: 3, nullable: true })

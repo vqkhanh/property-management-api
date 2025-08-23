@@ -13,6 +13,7 @@ import { ApiQuery, ApiTags } from '@nestjs/swagger';
 import { SpacesService } from './spaces.service';
 import { CreateSpaceDto } from './dto/create-space.dto';
 import { UpdateSpaceDto } from './dto/update-space.dto';
+import { QuerySpaceDto } from './dto/query-space.dto';
 
 @ApiTags('spaces')
 @Controller('spaces')
@@ -34,6 +35,16 @@ export class SpacesController {
   @ApiQuery({ name: 'building', required: false })
   tree(@Query('building') building?: string) {
     return this.service.getTree(building);
+  }
+
+  @Get('search')
+  @ApiQuery({ name: 'q', required: false })
+  @ApiQuery({ name: 'building', required: false })
+  @ApiQuery({ name: 'page', required: false, type: Number })
+  @ApiQuery({ name: 'limit', required: false, type: Number })
+  @ApiQuery({ name: 'sort', required: false, enum: ['ASC', 'DESC'] })
+  findAllPaginated(@Query() query: QuerySpaceDto) {
+    return this.service.findAllPaginated(query);
   }
 
   @Get(':id')

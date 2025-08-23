@@ -9,6 +9,7 @@ import { Repository } from 'typeorm';
 import { Space } from './entities/space.entity';
 import { CreateSpaceDto } from './dto/create-space.dto';
 import { UpdateSpaceDto } from './dto/update-space.dto';
+import { QuerySpaceDto } from './dto/query-space.dto';
 
 @Injectable()
 export class SpacesService {
@@ -124,5 +125,37 @@ export class SpacesService {
       }
     });
     return roots;
+  }
+
+  async findAllPaginated(query: QuerySpaceDto) {
+    const { q, building, page, limit, sort } = query;
+
+    const qb = this.repo
+      .createQueryBuilder('space')
+      .leftJoinAndSelect('space.parent', 'parent');
+
+    if (q) {
+      qb.andWhere('LOWER(space.displayName) LIKE LOWER(:q)', { q: `%${q}%` });
+    }
+
+    if (building) {
+      qb.andWhere('space.building = :building', { building });
+    }
+
+    qb.orderBy('space.displayName', sort)
+      .skip((page - 1) * limit)
+      .take(limit);
+
+    const [data, total] = await qb.getManyAndCount();
+
+    return {
+      data,
+      meta: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
+      },
+    };
   }
 }

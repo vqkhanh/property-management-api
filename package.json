@@ -25,7 +25,8 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "migration:generate": "npm run build && NODE_ENV=local npx typeorm-ts-node-commonjs migration:generate ./src/migrations/InitSchema -d ormconfig.ts",
     "migration:run": "NODE_ENV=local npx typeorm-ts-node-commonjs migration:run -d ormconfig.ts",
-    "migration:revert": "NODE_ENV=local npx typeorm-ts-node-commonjs migration:revert -d ormconfig.ts"
+    "migration:revert": "NODE_ENV=local npx typeorm-ts-node-commonjs migration:revert -d ormconfig.ts",
+    "seed": "ts-node -r tsconfig-paths/register scripts/seed.ts"
 
   },
   "dependencies": {

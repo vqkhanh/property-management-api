@@ -26,9 +26,25 @@ export class SpacesController {
   }
 
   @Get()
-  @ApiQuery({ name: 'building', required: false })
-  findAll(@Query('building') building?: string) {
-    return this.service.findAll({ building });
+  @ApiQuery({
+    name: 'building',
+    required: false,
+    description: 'Filter by building name',
+  })
+  @ApiQuery({
+    name: 'q',
+    required: false,
+    description: 'Search by displayName or refCode',
+  })
+  @ApiQuery({ name: 'page', required: false, type: Number, example: 1 })
+  @ApiQuery({ name: 'limit', required: false, type: Number, example: 10 })
+  findAll(
+    @Query('building') building?: string,
+    @Query('q') q?: string,
+    @Query('page') page = 1,
+    @Query('limit') limit = 10,
+  ) {
+    return this.service.findAll({ building, q, page, limit });
   }
 
   @Get('tree')
